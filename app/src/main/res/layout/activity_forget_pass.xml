@@ -31,7 +31,7 @@
                     android:layout_width="218dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/account_circle_24px"/>
+                    android:background="@drawable/person_24px"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"

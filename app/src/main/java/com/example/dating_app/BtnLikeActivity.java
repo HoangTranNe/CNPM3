@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class BtnLikeActivity extends AppCompatActivity {
 
@@ -64,7 +63,7 @@ public class BtnLikeActivity extends AppCompatActivity {
         }).start();
     }
     private void setupTopNavigationView() {
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.topNavViewBar);
+        BottomNavigationView bottomNavigationViewEx = findViewById(R.id.topNavViewBar);
         TopNavigationViewHelper.setupTopNavigationView(bottomNavigationViewEx);
         TopNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();

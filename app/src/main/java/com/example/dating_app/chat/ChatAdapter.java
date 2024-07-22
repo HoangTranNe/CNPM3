@@ -34,8 +34,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolders> {
         layoutView.setLayoutParams(lp);
         ChatViewHolders rcv = new ChatViewHolders(layoutView);
         return rcv;
-
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolders holder, int position) {
