@@ -1,3 +1,4 @@
+/*
 package com.example.dating_app.chat;
 
 import static java.security.AccessController.getContext;
@@ -35,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dating_app.R;
+import com.example.dating_app.match.MatchesActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
@@ -99,7 +102,7 @@ public class ChatActivity extends AppCompatActivity {
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setFocusable(false);
-        mChatLayoutManager = new LinearLayoutManager(ChatActivity.this);
+        LinearLayoutManager mChatLayoutManager = new LinearLayoutManager(ChatActivity.this);
         mRecyclerView.setLayoutManager(mChatLayoutManager);
         mChatAdapter = new ChatAdapter(getDataSetChat(), ChatActivity.this);
         mRecyclerView.setAdapter(mChatAdapter);
@@ -141,7 +144,7 @@ public class ChatActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.chatToolbar);
         setSupportActionBar(toolbar);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path: "Users").child(currentUserID);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference( "Users").child(currentUserID);
         Map<String, String> onChat = new HashMap<>();
 
         onChat.put("onChat", matchId);
@@ -155,6 +158,10 @@ public class ChatActivity extends AppCompatActivity {
 
         current.updateChildren(lastSeen);
 
+    }
+
+    private List<ChatObject> getDataSetChat() {
+        return java.util.Collections.emptyList();
     }
 
     private void getChatId() {
@@ -334,3 +341,4 @@ public class ChatActivity extends AppCompatActivity {
 
 
 }
+*/
