@@ -1,4 +1,3 @@
-/*
 package com.example.dating_app.chat;
 
 import static java.security.AccessController.getContext;
@@ -339,6 +338,4 @@ public class ChatActivity extends AppCompatActivity {
     private void deleteMatch(String matchId) {
     }
 
-
 }
-*/
