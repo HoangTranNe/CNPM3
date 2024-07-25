@@ -148,8 +148,7 @@
                 android:text="I can share my"
                 android:textColor="@color/textColor"
                 android:textSize="20dp"
-                android:visibility="gone
-"/>
+                android:visibility="gone"/>
 
 
         </LinearLayout>

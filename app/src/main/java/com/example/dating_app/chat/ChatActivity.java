@@ -20,13 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -45,6 +45,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
         mRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                if(bottom < oldBottom) {
+                if(i3 < i7) {
                     mRecyclerView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -129,6 +130,12 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     },100);
                 }
+            }
+        });
+        mRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+
             }
         });
 
@@ -146,7 +153,7 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference( "Users").child(currentUserID);
-        Map<String, String> onChat = new HashMap<>();
+        Map onChat = new HashMap<>();
 
         onChat.put("onChat", matchId);
         reference.updateChildren(onChat);
@@ -154,7 +161,7 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference current = FirebaseDatabase.getInstance().getReference("Users")
             .child(matchId).child("connections").child("matches").child(currentUserID);
 
-        Map<String, String> lastSeen = new HashMap<>();
+        Map lastSeen = new HashMap<>();
         lastSeen.put("lastSeen", "false");
 
         current.updateChildren(lastSeen);
@@ -162,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private List<ChatObject> getDataSetChat() {
-        return java.util.Collections.emptyList();
+        return resultsChat;
     }
 
     private void getChatId() {
@@ -218,13 +225,24 @@ public class ChatActivity extends AppCompatActivity {
                                 Map seenInfo = new HashMap<>();
                                 seenInfo.put("seen", "true");
                                 reference.updateChildren(seenInfo);
+
+                                newMessage = new ChatObject(message, currentUserBoolean, true);
+                            } else {
+                                newMessage = new ChatObject(message, currentUserBoolean, false);
                             }
                         }
-                        newMessage = new ChatObject(message, currentUserBoolean, isSeen);
-
+                        else {
+                            newMessage = new ChatObject(message, currentUserBoolean, true);
+                            DatabaseReference usersInChat = FirebaseDatabase.getInstance().getReference().child("Chat").child(matchId);
+                            resultsChat.add(newMessage);
+                            mChatAdapter.notifyDataSetChanged();
+                            if(mRecyclerView.getAdapter().getItemCount() > 0)
+                                mRecyclerView.smoothScrollToPosition(resultsChat.size() - 1);
+                            else
+                                Toast.makeText(ChatActivity.this, "Chat Empty", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -369,17 +387,21 @@ public class ChatActivity extends AppCompatActivity {
         int height = LinearLayout.LayoutParams.MATCH_PARENT;
 
         boolean focusable = true;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
         hideSoftKeyBoard();
 
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-        popupWindow.setOnTouchListener(new View.OnTouchListener() {
+       /* popupWindow.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    popupWindow.dismiss();
+                    return true;
+                }
+                return false;
             }
-        });
+        });*/
+
 
 
     }
@@ -395,7 +417,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.unmatch) {
+        if (item.getItemId() == R.id.unMatch) {
             new AlertDialog.Builder(ChatActivity.this)
                     .setTitle("Unmatch")
                     .setMessage("Are you sure you want to unmatch?")
@@ -458,7 +480,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
-                        if(dataSnapshot.child("name").getValue().toString();
+                        dataSnapshot.child("name").getValue().toString();
                     }
                 }
 
@@ -500,4 +522,12 @@ public class ChatActivity extends AppCompatActivity {
         matchDb.updateChildren(lastTimestampMap);
     }
 
+    private List<ChatObject> resultsChat = new ArrayList<>();
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        return;
+    }
 }
